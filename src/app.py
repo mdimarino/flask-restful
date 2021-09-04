@@ -28,8 +28,13 @@ class Ship(Resource):
         abort_if_ship_registry_doesnt_exist(ship_registry)
         return ships[ship_registry]
 
-    def put(self, ship_registry):
+    def post(self, ship_registry):
         abort_if_ship_registry_exists(ship_registry)
+        args = ship_put_args.parse_args()
+        ships[ship_registry] = args
+        return ships[ship_registry], 201
+
+    def put(self, ship_registry):
         args = ship_put_args.parse_args()
         ships[ship_registry] = args
         return ships[ship_registry], 201
@@ -43,6 +48,7 @@ class Ships(Resource):
     def get(self):
         return ships
 
+# defining endpoints
 api.add_resource(Ship, '/ship/<string:ship_registry>')
 api.add_resource(Ships, '/ships')
 
